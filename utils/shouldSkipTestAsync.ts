@@ -1,4 +1,4 @@
-import { Constants } from '../Constants';
+import { Constants } from './Constants';
 import { promises } from 'fs';
 import test from '@playwright/test';
 
