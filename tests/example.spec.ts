@@ -1,4 +1,10 @@
-import { expect, test } from '@playwright/test';
+import test, { expect } from '@playwright/test';
+
+import shouldSkipTestAsync from '../utils/shouldSkipTestAsync';
+
+test.beforeEach(async ({ page }) => {
+  await shouldSkipTestAsync(test);
+});
 
 test('has title', async ({ page }) => {
   await page.goto('https://playwright.dev/');
