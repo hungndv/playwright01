@@ -6,6 +6,21 @@ test.beforeEach(async ({ page }) => {
   await shouldSkipTestAsync(test);
 });
 
+test.afterEach(async ({ page }) => {
+  const info = test.info();
+  const status = test.info().status;
+
+  if (status == "skipped") return;
+
+  if (status == "passed") {
+    // log result to test plan
+    return;
+  }
+
+  await page.screenshot({ path: 'screenshot.png' });
+
+});
+
 test('[1] Title 1', async ({ page }) => {
   await page.goto('https://playwright.dev/');
   await page.getByRole('link', { name: 'Get started' }).click();
@@ -13,7 +28,7 @@ test('[1] Title 1', async ({ page }) => {
 });
 
 test('[4] Title 4', async ({ playwrightDevPage, page }) => {
-  await playwrightDevPage.goto();
-  await playwrightDevPage.pageObjectModel();
+  await playwrightDevPage.gotoHomePage();
+  await playwrightDevPage.clickPageObjectModelLink();
   await expect(page.locator("article")).toContainText('Page Object Model is a common pattern');
 });

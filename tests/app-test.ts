@@ -1,4 +1,4 @@
-import { PlaywrightDevPage } from "../pages/playwright-dev-page";
+import { PlaywrightDevPage } from '../pages/playwright-dev-page';
 import { test as base } from '@playwright/test';
 
 type AppFixtures = {
