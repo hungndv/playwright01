@@ -19,18 +19,19 @@ class AppReporter implements Reporter {
 
   onTestEnd(test: TestCase, result: TestResult) {
     const status = result.status;
-    console.log(`Finished test "${test.title}": ${status}`);
-    const msg = result.steps.reduce<string>((msg: string, step: TestStep): string => {
-      msg += `${"\n"}${step.title} -- ${step.location?.file.replace(/^.*[\\/]/, '')}:${step.location?.line} -- ${step.duration}`;
+    console.log(`\nFinished test "${test.title}": ${status}`);
+    const msg = result.steps.reduce<string>((msg: string, step: TestStep, currentIndex: number): string => {
+      msg += `${currentIndex != 0 ? "\n" : ""}\t${step.title} -- ${step.location?.file.replace(/^.*[\\/]/, '')}:${step.location?.line} -- ${step.duration}`;
       if (step.error) {
         msg += `\n${step.error.message}`;
-        msg += `\n${result.attachments[0].path}`;
+        if (result.attachments[0]) {
+          msg += `\n${result.attachments[0].path}`;
+        }
       }
       return msg;
     }, "");
 
     if (status != "skipped") {
-      const r = status == "passed" ? status : "failed";
       console.log(msg);
     }
   }

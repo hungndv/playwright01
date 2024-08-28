@@ -1,4 +1,4 @@
-import { Constants } from './utils/Constants';
+import { Constants } from './utils/constants';
 import type { FullConfig } from '@playwright/test';
 import { promises } from 'fs';
 
