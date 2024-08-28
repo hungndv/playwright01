@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { BasePage } from './base-page';
+import { App1BasePage } from './app1-base-page';
 
-export class PlaywrightDevPage extends BasePage {
+export class PlaywrightDevPage extends App1BasePage {
   readonly getStartedLink: Locator;
   readonly gettingStartedHeader: Locator;
   readonly pomLink: Locator;

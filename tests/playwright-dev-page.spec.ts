@@ -1,4 +1,4 @@
-import { expect, test } from './app-test';
+import { expect, test } from './app1-test';
 
 import shouldSkipTestAsync from '../utils/shouldSkipTestAsync';
 
