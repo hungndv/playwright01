@@ -1,4 +1,4 @@
-import test, { expect } from '@playwright/test';
+import { expect, test } from './app1-test';
 
 import getExcelData from '../utils/get-excel-data';
 import shouldSkipTestAsync from '../utils/should-skip-test-async';
@@ -27,7 +27,8 @@ test('[9] Title 9', async ({ page }) => {
 
 });
 
-test('[10] Title 10', async ({ page }) => {
+test('[10] TodoMvcTest 01', async ({ todoMvcPage, page }) => {
+  await todoMvcPage.gotoPage();
   var data = await getExcelData("Product1", "Page2", "2");
-
+  await todoMvcPage.populate(data);
 });

@@ -9,6 +9,7 @@ export class PlaywrightDevPage extends App1BasePage {
 
   constructor(page: Page) {
     super(page);
+
     this.getStartedLink = page.locator('a', { hasText: 'Get started' });
     this.gettingStartedHeader = page.locator('h1', { hasText: 'Installation' });
     this.pomLink = page.locator('li', {

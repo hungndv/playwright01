@@ -19,7 +19,7 @@ async function getExcelData(sheetName: string, page: string, id: string) {
   const colCount = range.e.c + 1;
   const rowCount = range.e.r + 1;
   const colWithIdMatched = [...Array(colCount).keys()].map(item => XLSX.utils.encode_col(item)).find(col => ws[`${col}1`].v == id);
-  const data = {};
+  const data: object[] = [];
   const propCol = "A";
   const pageCol = "B";
   [...Array(rowCount).keys()].forEach(item => {
@@ -27,7 +27,9 @@ async function getExcelData(sheetName: string, page: string, id: string) {
     if (ws[`${pageCol}${rowNo}`].v == page) {
       const propName = ws[`${propCol}${rowNo}`].v;
       const propValue = ws[`${colWithIdMatched}${rowNo}`].v;
-      data[propName] = propValue;
+      const obj = {};
+      obj[propName] = propValue;
+      data.push(obj);
     }
   });
   console.log(data);
