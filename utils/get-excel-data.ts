@@ -9,6 +9,7 @@ XLSX.set_fs(fs);
 
 async function getExcelData(sheetName: string, page: string, id: string) {
   const wb = XLSX.readFile(Constants.FILE_DATA_EXCEL, { cellStyles: true });
+  await new Promise(resolve => setTimeout(resolve, 5000));
   const ws = wb.Sheets[sheetName];
   const a1Style = ws['!ref']?.toString();
 
