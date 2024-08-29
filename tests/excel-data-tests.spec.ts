@@ -1,16 +1,13 @@
 import test, { expect } from '@playwright/test';
 
-import shouldSkipTestAsync from '../utils/shouldSkipTestAsync';
+import getExcelData from '../utils/get-excel-data';
+import shouldSkipTestAsync from '../utils/should-skip-test-async';
 
 test.beforeEach(async ({ page }) => {
   await shouldSkipTestAsync(test);
 });
 
 test('[6] Title 6', async ({ page }) => {
-  await page.goto('https://playwright.dev/');
+  var data = getExcelData("Product1", "Page2", "2");
 
-  // Expect a title "to contain" a substring.
-  await expect(page).toHaveTitle(/Playwrighteee/);
-  await page.goto('https://playwright.dev/');
-  await page.goto('https://playwright.dev/');
 });

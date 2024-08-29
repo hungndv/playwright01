@@ -2,7 +2,7 @@ import { Constants } from '../utils/constants';
 import fs from 'fs';
 import { parse } from 'csv-parse/sync';
 import path from 'path';
-import shouldSkipTestAsync from '../utils/shouldSkipTestAsync';
+import shouldSkipTestAsync from '../utils/should-skip-test-async';
 import { test } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
