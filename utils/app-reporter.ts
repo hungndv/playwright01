@@ -20,6 +20,9 @@ class AppReporter implements Reporter {
   onTestEnd(test: TestCase, result: TestResult) {
     const status = result.status;
     console.log(`\nFinished test "${test.title}": ${status}`);
+
+    if (status == "skipped") return;
+
     const msg = result.steps.reduce<string>((msg: string, step: TestStep, currentIndex: number): string => {
       msg += `${currentIndex != 0 ? "\n" : ""}\t${step.title} -- ${step.location?.file.replace(/^.*[\\/]/, '')}:${step.location?.line} -- ${step.duration}`;
       if (step.error) {
@@ -31,9 +34,7 @@ class AppReporter implements Reporter {
       return msg;
     }, "");
 
-    if (status != "skipped") {
-      console.log(msg);
-    }
+    console.log(msg);
   }
 
   // onEnd(result: FullResult) {
