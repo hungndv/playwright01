@@ -23,7 +23,7 @@ class AppReporter implements Reporter {
 
     if (status == "skipped") return;
 
-    const msg = result.steps.reduce<string>((msg: string, step: TestStep, currentIndex: number): string => {
+    let msg = result.steps.reduce<string>((msg: string, step: TestStep, currentIndex: number): string => {
       msg += `${currentIndex != 0 ? "\n" : ""}\t${step.title} -- ${step.location?.file.replace(/^.*[\\/]/, '')}:${step.location?.line} -- ${step.duration}`;
       if (step.error) {
         msg += `\n${step.error.message}`;
@@ -34,6 +34,9 @@ class AppReporter implements Reporter {
       return msg;
     }, "");
 
+    msg += "\n\n\t=========>>> All log messages from console.log()\n";
+    // msg += result.stdout.reduce((accumulator, s) => accumulator += `\t${s}`);
+    msg += result.stdout.join("");
     console.log(msg);
   }
 
