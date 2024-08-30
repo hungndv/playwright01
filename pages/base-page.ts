@@ -1,8 +1,11 @@
-import { Locator, type Page } from '@playwright/test';
+import { expect, Locator, type Page } from '@playwright/test';
 import { text } from 'stream/consumers';
 import { StringUtils } from '../utils/string-utils';
 import { Constants } from '../utils/constants';
 import path from 'path';
+import { LocatorUtils } from '../utils/locator-utils';
+import { BooleanUtils } from '../utils/boolean-utils';
+import { error } from 'console';
 
 export class BasePage {
   readonly page: Page;
@@ -32,7 +35,7 @@ export class BasePage {
   }
 
   private async setText(locator: Locator, propValue: string) {
-    const tagName: string = await locator.evaluate(e => e.tagName.toLowerCase());
+    const tagName = await LocatorUtils.getTagName(locator);
 
     switch (tagName) {
       case Constants.TAG_TEXTAREA:
@@ -40,7 +43,7 @@ export class BasePage {
         break;
       case Constants.TAG_INPUT:
         {
-          const inputType = await locator.evaluate(e => e.getAttribute("type")?.toLocaleLowerCase());
+          const inputType = await LocatorUtils.getInputType(locator);
           switch (inputType) {
             case Constants.INPUT_TYPE_CHECKBOX:
               await locator.setChecked(StringUtils.toBoolean(propValue));
@@ -64,6 +67,78 @@ export class BasePage {
         }
         break;
       default:
+        break;
+    }
+  }
+
+  private async getText(locator: Locator) {
+    const tagName = await LocatorUtils.getTagName(locator);
+
+    switch (tagName) {
+      case Constants.TAG_TEXTAREA:
+        return await locator.inputValue();
+      case Constants.TAG_INPUT:
+        {
+          const inputType = await LocatorUtils.getInputType(locator);
+          switch (inputType) {
+            case Constants.INPUT_TYPE_CHECKBOX:
+              return BooleanUtils.toYesNoString(await locator.isChecked());
+            case Constants.INPUT_TYPE_FILE:
+              break;
+            case Constants.INPUT_TYPE_TEXT:
+            default:
+              return await locator.inputValue();
+          }
+        }
+        break;
+      default:
+        return locator.innerText;
+    }
+  }
+
+  async verify(model: object[]): Promise<void> {
+    for (const obj of model) {
+      const propName = Object.keys(obj)[0];
+      const propValue = obj[propName];
+
+      if (!propValue) return;
+
+      const locator: Locator = this[propName];
+
+      if (!locator) return;
+
+      await this.expectLocatorToBe(locator, propValue)
+
+    };
+  }
+
+  async expectLocatorToBe(locator: Locator, expected: string) {
+    const tagName = await LocatorUtils.getTagName(locator);
+
+    switch (tagName) {
+      case Constants.TAG_TEXTAREA:
+        await expect(locator).toHaveValue(expected);
+        break;
+      case Constants.TAG_INPUT:
+        {
+          const inputType = await LocatorUtils.getInputType(locator);
+          switch (inputType) {
+            case Constants.INPUT_TYPE_CHECKBOX:
+              const actual = await this.getText(locator);
+              expect(actual).toBe(expected);
+              break;
+            case Constants.INPUT_TYPE_FILE:
+              expect(await locator.inputValue()).toContain(expected);
+              break;
+            case Constants.INPUT_TYPE_TEXT:
+            default:
+              await expect(locator).toHaveValue(expected);
+              break;
+          }
+        }
+        break;
+      default:
+        await expect(locator).toHaveText(expected);
         break;
     }
   }

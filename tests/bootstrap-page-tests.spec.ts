@@ -31,7 +31,7 @@ test('[10] Bootstrap From Controls 01', async ({ bootstrapFormPage, page }) => {
   await bootstrapFormPage.gotoFormControlPage();
   var data = await getExcelData("Product1", "Page2", "2");
   await bootstrapFormPage.populate(data);
-  debugger
+  await bootstrapFormPage.verify(data);
 
 
 });
