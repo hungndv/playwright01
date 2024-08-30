@@ -1,6 +1,6 @@
 import test, { expect } from '@playwright/test';
 
-import shouldSkipTestAsync from '../utils/should-skip-test-async';
+import shouldSkipTestAsync from '../utils/should-skip-test';
 
 test.beforeEach(async ({ page }) => {
   await shouldSkipTestAsync(test);

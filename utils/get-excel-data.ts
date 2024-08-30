@@ -7,9 +7,17 @@ import { error } from 'console';
 /* load 'fs' for readFile and writeFile support */
 XLSX.set_fs(fs);
 
-async function getExcelData(sheetName: string, page: string, id: string) {
+async function getExcelData(sheetName: string, page: string, id: string): Promise<Object[]> {
   const wb = XLSX.readFile(Constants.FILE_DATA_EXCEL, { cellStyles: true });
-  await new Promise(resolve => setTimeout(resolve, 5000));
+
+  // recalc the workbook
+  // const XLSX_CALC = require('xlsx-calc');
+  // const formulajs = require('@formulajs/formulajs');
+  // XLSX_CALC.import_functions(formulajs);
+  // XLSX_CALC(wb);
+
+  // await new Promise(resolve => setTimeout(resolve, 5000));
+
   const ws = wb.Sheets[sheetName];
   const a1Style = ws['!ref']?.toString();
 
