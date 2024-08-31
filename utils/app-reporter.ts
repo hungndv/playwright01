@@ -24,7 +24,7 @@ class AppReporter implements Reporter {
     if (status == "skipped") return;
 
     let msg = result.steps.reduce<string>((msg: string, step: TestStep, currentIndex: number): string => {
-      msg += `${currentIndex != 0 ? "\n" : ""}\t${step.title} -- ${step.location?.file.replace(/^.*[\\/]/, '')}:${step.location?.line} -- ${step.duration}`;
+      msg += `${currentIndex != 0 ? "\n" : ""}\t${step.title} -- ${step.location?.file.replace(/^.*[\\/]/, '')}:${step.location?.line}:${step.location?.column} -- ${step.duration}`;
       if (step.error) {
         msg += `\n${step.error.message}`;
         if (result.attachments[0]) {
