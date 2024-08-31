@@ -1,11 +1,9 @@
 import { expect, Locator, type Page } from '@playwright/test';
-import { text } from 'stream/consumers';
 import { StringUtils } from '../utils/string-utils';
 import { Constants } from '../utils/constants';
 import path from 'path';
 import { LocatorUtils } from '../utils/locator-utils';
 import { BooleanUtils } from '../utils/boolean-utils';
-import { error } from 'console';
 
 export class BasePage {
   readonly page: Page;
@@ -52,11 +50,6 @@ export class BasePage {
               const fileChooserPromise = this.page.waitForEvent('filechooser');
               await locator.click();
               const fileChooser = await fileChooserPromise;
-              // File destination.txt will be created or overwritten by default.
-              const fs = require('fs');
-              fs.copyFile('sample.pdf', propValue, (err) => {
-                if (err) throw err;
-              });
               await fileChooser.setFiles(path.join(__dirname, '../', propValue));
               break;
             case Constants.INPUT_TYPE_TEXT:
