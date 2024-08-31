@@ -6,6 +6,7 @@ export class Constants {
 
   public static readonly INPUT_TYPE_CHECKBOX = "checkbox";
   public static readonly INPUT_TYPE_FILE = "file";
+  public static readonly INPUT_TYPE_RADIO = "radio";
   public static readonly INPUT_TYPE_TEXT = "text";
 
   public static readonly TAG_TEXTAREA = "textarea";

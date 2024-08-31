@@ -35,4 +35,7 @@ test('[10] Bootstrap From Controls 01', async ({ bootstrapFormPage, page }) => {
   await bootstrapFormPage.clickLink("Select");
   await bootstrapFormPage.populate(data);
   await bootstrapFormPage.verify(data);
+  await bootstrapFormPage.clickLink("Checks & radios");
+  await bootstrapFormPage.populate(data);
+  await bootstrapFormPage.verify(data);
 });

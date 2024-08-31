@@ -36,6 +36,7 @@ export class BasePage {
     };
   }
 
+  @loggedMethod
   private async setText(locator: Locator, propValue: string) {
     const tagName = await LocatorUtils.getTagName(locator);
 
@@ -45,6 +46,7 @@ export class BasePage {
           const inputType = await LocatorUtils.getInputType(locator);
           switch (inputType) {
             case Constants.INPUT_TYPE_CHECKBOX:
+            case Constants.INPUT_TYPE_RADIO:
               await locator.setChecked(StringUtils.toBoolean(propValue));
               break;
             case Constants.INPUT_TYPE_FILE:
@@ -80,6 +82,7 @@ export class BasePage {
           const inputType = await LocatorUtils.getInputType(locator);
           switch (inputType) {
             case Constants.INPUT_TYPE_CHECKBOX:
+            case Constants.INPUT_TYPE_RADIO:
               return BooleanUtils.toYesNoString(await locator.isChecked());
             case Constants.INPUT_TYPE_FILE:
               break;
@@ -114,6 +117,7 @@ export class BasePage {
     };
   }
 
+  @loggedMethod
   async expectLocatorToBe(locator: Locator, expected: string) {
     const tagName = await LocatorUtils.getTagName(locator);
 
@@ -123,6 +127,7 @@ export class BasePage {
           const inputType = await LocatorUtils.getInputType(locator);
           switch (inputType) {
             case Constants.INPUT_TYPE_CHECKBOX:
+            case Constants.INPUT_TYPE_RADIO:
               const actual = await this.getText(locator);
               expect(actual).toBe(expected);
               break;
