@@ -30,8 +30,9 @@ test('[10] Bootstrap From Controls 01', async ({ bootstrapFormPage, page }) => {
   await bootstrapFormPage.gotoUrl("https://getbootstrap.com/docs/5.0/forms/form-control/");
   var data = await bootstrapFormPage.getExcelData("Product1", "Page2", "2");
   await bootstrapFormPage.populate(data);
-  expect(0).toEqual(1);
+  // expect(0).toEqual(1);
   await bootstrapFormPage.verify(data);
-
-
+  await bootstrapFormPage.clickLink("Select");
+  await bootstrapFormPage.populate(data);
+  await bootstrapFormPage.verify(data);
 });

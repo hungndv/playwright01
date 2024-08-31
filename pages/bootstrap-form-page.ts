@@ -6,6 +6,7 @@ export class BootstrapFormPage extends App1BasePage {
   readonly exampleTextarea: Locator;
   readonly password: Locator;
   readonly multiFileInput: Locator;
+  readonly select: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -14,5 +15,6 @@ export class BootstrapFormPage extends App1BasePage {
     this.exampleTextarea = page.getByLabel("Example textarea");
     this.password = page.locator("css=#inputPassword");
     this.multiFileInput = page.getByLabel("Multiple files input example");
+    this.select = page.locator("css=select").locator('nth=0');
   }
 }

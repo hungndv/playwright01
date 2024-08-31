@@ -10,4 +10,5 @@ export class Constants {
 
   public static readonly TAG_TEXTAREA = "textarea";
   public static readonly TAG_INPUT = "input";
+  public static readonly TAG_SELECT = "select";
 }

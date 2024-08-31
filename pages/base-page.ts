@@ -13,6 +13,8 @@ export class BasePage {
     this.page = page;
   }
 
+
+  @loggedMethod
   async clickLink(linkText: string): Promise<void> {
     await this.page.locator('a', { hasText: linkText }).click();
   }
@@ -23,11 +25,11 @@ export class BasePage {
       const propName = Object.keys(obj)[0];
       const propValue = obj[propName];
 
-      if (!propValue) return;
+      if (!propValue) continue;
 
       const locator: Locator = this[propName];
 
-      if (!locator) return;
+      if (!await locator.isVisible()) continue;
 
       await this.setText(locator, propValue);
 
@@ -38,9 +40,6 @@ export class BasePage {
     const tagName = await LocatorUtils.getTagName(locator);
 
     switch (tagName) {
-      case Constants.TAG_TEXTAREA:
-        await locator.fill(propValue);
-        break;
       case Constants.TAG_INPUT:
         {
           const inputType = await LocatorUtils.getInputType(locator);
@@ -61,6 +60,12 @@ export class BasePage {
           }
         }
         break;
+      case Constants.TAG_SELECT:
+        await locator.selectOption({ label: propValue });
+        break;
+      case Constants.TAG_TEXTAREA:
+        await locator.fill(propValue);
+        break;
       default:
         break;
     }
@@ -70,8 +75,6 @@ export class BasePage {
     const tagName = await LocatorUtils.getTagName(locator);
 
     switch (tagName) {
-      case Constants.TAG_TEXTAREA:
-        return await locator.inputValue();
       case Constants.TAG_INPUT:
         {
           const inputType = await LocatorUtils.getInputType(locator);
@@ -85,7 +88,10 @@ export class BasePage {
               return await locator.inputValue();
           }
         }
-        break;
+      case Constants.TAG_SELECT:
+        return await locator.evaluate((node: HTMLSelectElement) => node.options[node.options.selectedIndex].textContent);
+      case Constants.TAG_TEXTAREA:
+        return await locator.inputValue();
       default:
         return locator.innerText;
     }
@@ -97,11 +103,11 @@ export class BasePage {
       const propName = Object.keys(obj)[0];
       const propValue = obj[propName];
 
-      if (!propValue) return;
+      if (!propValue) continue;
 
       const locator: Locator = this[propName];
 
-      if (!locator) return;
+      if (!await locator.isVisible()) continue;
 
       await this.expectLocatorToBe(locator, propValue)
 
@@ -112,9 +118,6 @@ export class BasePage {
     const tagName = await LocatorUtils.getTagName(locator);
 
     switch (tagName) {
-      case Constants.TAG_TEXTAREA:
-        await expect(locator).toHaveValue(expected);
-        break;
       case Constants.TAG_INPUT:
         {
           const inputType = await LocatorUtils.getInputType(locator);
@@ -132,6 +135,13 @@ export class BasePage {
               break;
           }
         }
+        break;
+      case Constants.TAG_SELECT:
+        const selectedText = await this.getText(locator);
+        expect(selectedText).toEqual(expected);
+        break;
+      case Constants.TAG_TEXTAREA:
+        await expect(locator).toHaveValue(expected);
         break;
       default:
         await expect(locator).toHaveText(expected);
