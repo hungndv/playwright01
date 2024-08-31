@@ -15,9 +15,4 @@ export class BootstrapFormPage extends App1BasePage {
     this.password = page.locator("css=#inputPassword");
     this.multiFileInput = page.getByLabel("Multiple files input example");
   }
-
-  async gotoFormControlPage() {
-    console.log("gotoPage");
-    await this.page.goto('https://getbootstrap.com/docs/5.0/forms/form-control/');
-  }
 }

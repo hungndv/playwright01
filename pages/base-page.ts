@@ -4,6 +4,7 @@ import { Constants } from '../utils/constants';
 import path from 'path';
 import { LocatorUtils } from '../utils/locator-utils';
 import { BooleanUtils } from '../utils/boolean-utils';
+import loggedMethod from '../utils/logged-method';
 
 export class BasePage {
   readonly page: Page;
@@ -16,6 +17,7 @@ export class BasePage {
     await this.page.locator('a', { hasText: linkText }).click();
   }
 
+  @loggedMethod
   async populate(model: object[]): Promise<void> {
     for (const obj of model) {
       const propName = Object.keys(obj)[0];
@@ -89,6 +91,7 @@ export class BasePage {
     }
   }
 
+  @loggedMethod
   async verify(model: object[]): Promise<void> {
     for (const obj of model) {
       const propName = Object.keys(obj)[0];
@@ -134,5 +137,10 @@ export class BasePage {
         await expect(locator).toHaveText(expected);
         break;
     }
+  }
+
+  @loggedMethod
+  async gotoUrl(url: string) {
+    await this.page.goto(url);
   }
 }
