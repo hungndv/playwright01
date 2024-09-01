@@ -158,4 +158,17 @@ export class BasePage {
   async gotoUrl(url: string) {
     await this.page.goto(url);
   }
+
+  @loggedMethod
+  async clickAndVerifyFileDownloaded(locator: Locator, filename: string) {
+    // Start waiting for download before clicking. Note no await.
+    const downloadPromise = this.page.waitForEvent('download');
+    await locator.click();
+    const download = await downloadPromise;
+
+    // Wait for the download process to complete and save the downloaded file somewhere.
+    const actual = download.suggestedFilename();
+    await download.saveAs(path.join(Constants.FOLDER_AUTO_FILES, actual));
+    expect(actual).toEqual(filename);
+  }
 }

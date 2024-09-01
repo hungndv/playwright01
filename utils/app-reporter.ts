@@ -4,6 +4,7 @@ import type {
   Reporter,
   Suite,
   TestCase,
+  TestError,
   TestResult,
   TestStep
 } from '@playwright/test/reporter';
@@ -17,27 +18,40 @@ class AppReporter implements Reporter {
   //   console.log(`Starting test ${test.title}`);
   // }
 
+  onStepEnd(test: TestCase, result: TestResult, step: TestStep) {
+    if (step.error) {
+      const stack = step.error.stack;
+      if (stack) {
+        console.log("\n" + stack);
+        result.stdout.push("\n" + stack);
+      }
+      const snippet = step.error.snippet;
+      if (snippet) {
+        console.log("\n" + snippet);
+        result.stdout.push("\n" + snippet);
+      }
+    }
+  }
+
   onTestEnd(test: TestCase, result: TestResult) {
     const status = result.status;
     console.log(`\nFinished test "${test.title}": ${status}`);
 
     if (status == "skipped") return;
 
-    let msg = result.steps.reduce<string>((msg: string, step: TestStep, currentIndex: number): string => {
-      msg += `${currentIndex != 0 ? "\n" : ""}\t${step.title} -- ${step.location?.file.replace(/^.*[\\/]/, '')}:${step.location?.line}:${step.location?.column} -- ${step.duration}`;
-      if (step.error) {
-        msg += `\n${step.error.message}`;
-        if (result.attachments[0]) {
-          msg += `\n${result.attachments[0].path}`;
-        }
-      }
-      return msg;
-    }, "");
+    let aMsg = "";
+    if (result.attachments) {
+      aMsg = `\n${JSON.stringify(result.attachments)}`;
+      console.log(aMsg);
+      result.stdout.push(aMsg);
+    }
 
-    msg += "\n\n\t=========>>> All log messages from console.log()\n";
-    // msg += result.stdout.reduce((accumulator, s) => accumulator += `\t${s}`);
-    msg += result.stdout.join("");
-    console.log(msg);
+    let tsmLog = "";
+    tsmLog += "\n=========>>> All log messages to TEST MANAGEMENT SYSTEM (TMS)\n";
+
+    tsmLog += result.stdout.join("");
+
+    console.log(tsmLog);
   }
 
   // onEnd(result: FullResult) {
