@@ -39,6 +39,8 @@ npm install
 npx playwright test ./tests --project="Google Chrome"
 ```
 
-# NOTES:
+# Notes:
 - .env file contains TEST_PLAN_ID to run test cases, which can be un-run/failed
+
+# Issues:
 - Run test from cursor in VSCode not run global setup <https://github.com/microsoft/playwright/issues/32121>
